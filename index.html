@@ -262,10 +262,16 @@
       <div class="pdf-shell" id="internDeckShell">
         <img id="internImg" alt="Internship slide image" style="width:100%;height:100%;object-fit:contain;background:#0a0a0a;"/>
       </div>
-      <div class="pdf-shell" id="internVideoShell" style="display:none;">
-        <video id="internVideo" controls style="width:100%;height:100%;object-fit:contain;background:#000;">
-          <source src="../Qorvo_Intern_2019/The_Ghost_in_the_Machine.mp4" type="video/mp4" />
-        </video>
+      <div class="pdf-shell" id="internVideoShell" style="display:none;background:#000;">
+        <iframe
+          id="internVideoFrame"
+          src="https://www.youtube.com/embed/qzhs7aVC5mg?start=187&rel=0"
+          title="Qorvo Internship Video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+          style="width:100%;height:100%;border:0;background:#000;"
+        ></iframe>
       </div>
     </div>
   </div>
@@ -326,7 +332,7 @@
     const internInput = document.getElementById('internInput');
     const internDeckShell = document.getElementById('internDeckShell');
     const internVideoShell = document.getElementById('internVideoShell');
-    const internVideo = document.getElementById('internVideo');
+    const internVideoFrame = document.getElementById('internVideoFrame');
     const internFolder = 'FDD_RF_Sensitivity_Analysis';
     const internTotal = 19;
     let internPage = 1;
@@ -364,11 +370,15 @@
       internVideoShell.style.display = 'none';
       renderIntern();
     }
+    function resetInternVideo(){
+      // Reload iframe to stop playback when exiting video mode
+      internVideoFrame.src = 'https://www.youtube.com/embed/qzhs7aVC5mg?start=187&rel=0';
+    }
+
     function closeIntern(){
       internOverlay.classList.remove('open');
       internOverlay.setAttribute('aria-hidden','true');
-      internVideo.pause();
-      internVideo.currentTime = 187;
+      resetInternVideo();
       internVideoMode = false;
       internDeckShell.style.display = 'block';
       internVideoShell.style.display = 'none';
@@ -378,19 +388,15 @@
       if(internVideoMode){
         internDeckShell.style.display = 'none';
         internVideoShell.style.display = 'block';
-        // Always start Corvo/Qorvo internship video at 3:07
-        internVideo.currentTime = 187;
-        internVideo.play().catch(() => {});
       } else {
         internDeckShell.style.display = 'block';
         internVideoShell.style.display = 'none';
-        internVideo.pause();
+        resetInternVideo();
       }
     }
 
     function backToInternDeck(){
-      internVideo.pause();
-      internVideo.currentTime = 187;
+      resetInternVideo();
       internVideoMode = false;
       internDeckShell.style.display = 'block';
       internVideoShell.style.display = 'none';
