@@ -254,7 +254,7 @@
       <div class="nested-nav">
         <button class="toolbar-btn" id="prevIntern">◀ Prev</button>
         <button class="toolbar-btn" id="nextIntern">Next ▶</button>
-        <button class="toolbar-btn" id="toggleInternVideo">Video</button>
+        <button class="toolbar-btn" id="openInternVideo">Video ↗</button>
         <button class="toolbar-btn" id="exitIntern">Back (Esc)</button>
       </div>
     </div>
@@ -262,17 +262,7 @@
       <div class="pdf-shell" id="internDeckShell">
         <img id="internImg" alt="Internship slide image" style="width:100%;height:100%;object-fit:contain;background:#0a0a0a;"/>
       </div>
-      <div class="pdf-shell" id="internVideoShell" style="display:none;background:#000;">
-        <iframe
-          id="internVideoFrame"
-          src="https://www.youtube.com/embed/qzhs7aVC5mg?start=187&rel=0"
-          title="Qorvo Internship Video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-          style="width:100%;height:100%;border:0;background:#000;"
-        ></iframe>
-      </div>
+
     </div>
   </div>
 
@@ -331,12 +321,9 @@
     const internSlider = document.getElementById('internSlider');
     const internInput = document.getElementById('internInput');
     const internDeckShell = document.getElementById('internDeckShell');
-    const internVideoShell = document.getElementById('internVideoShell');
-    const internVideoFrame = document.getElementById('internVideoFrame');
     const internFolder = 'FDD_RF_Sensitivity_Analysis';
     const internTotal = 19;
     let internPage = 1;
-    let internVideoMode = false;
 
     function nestedOpen(){ return nestedOverlay.classList.contains('open'); }
     function anyOverlayOpen(){ return nestedOverlay.classList.contains('open') || internOverlay.classList.contains('open'); }
@@ -365,50 +352,26 @@
     function openIntern(){
       internOverlay.classList.add('open');
       internOverlay.setAttribute('aria-hidden','false');
-      internVideoMode = false;
       internDeckShell.style.display = 'block';
-      internVideoShell.style.display = 'none';
       renderIntern();
     }
-    function resetInternVideo(){
-      // Reload iframe to stop playback when exiting video mode
-      internVideoFrame.src = 'https://www.youtube.com/embed/qzhs7aVC5mg?start=187&rel=0';
-    }
-
     function closeIntern(){
       internOverlay.classList.remove('open');
       internOverlay.setAttribute('aria-hidden','true');
-      resetInternVideo();
-      internVideoMode = false;
       internDeckShell.style.display = 'block';
-      internVideoShell.style.display = 'none';
-    }
-    function toggleInternVideo(){
-      internVideoMode = !internVideoMode;
-      if(internVideoMode){
-        internDeckShell.style.display = 'none';
-        internVideoShell.style.display = 'block';
-      } else {
-        internDeckShell.style.display = 'block';
-        internVideoShell.style.display = 'none';
-        resetInternVideo();
-      }
     }
 
-    function backToInternDeck(){
-      resetInternVideo();
-      internVideoMode = false;
-      internDeckShell.style.display = 'block';
-      internVideoShell.style.display = 'none';
+    function openInternVideo(){
+      window.open('https://youtu.be/qzhs7aVC5mg?t=187', '_blank', 'noopener,noreferrer');
     }
 
     document.getElementById('enterNestedBtn').addEventListener('click', openNested);
     document.getElementById('enterInternBtn').addEventListener('click', openIntern);
-    document.getElementById('exitIntern').addEventListener('click', () => { if (internVideoMode) backToInternDeck(); else closeIntern(); });
+    document.getElementById('exitIntern').addEventListener('click', closeIntern);
     document.getElementById('prevIntern').addEventListener('click', ()=>{ internPage = Math.max(1, internPage-1); renderIntern(); });
     document.getElementById('nextIntern').addEventListener('click', ()=>{ internPage = Math.min(internTotal, internPage+1); renderIntern(); });
-    document.getElementById('toggleInternVideo').addEventListener('click', toggleInternVideo);
-    internOverlay.addEventListener('click', (e) => { if (e.target === internOverlay) { if (internVideoMode) backToInternDeck(); else closeIntern(); } });
+    document.getElementById('openInternVideo').addEventListener('click', openInternVideo);
+    internOverlay.addEventListener('click', (e) => { if (e.target === internOverlay) { closeIntern(); } });
     internSlider.addEventListener('input', (e)=>{ internPage = Math.min(internTotal, Math.max(1, Number(e.target.value)||1)); renderIntern(); });
     internInput.addEventListener('change', (e)=>{ internPage = Math.min(internTotal, Math.max(1, Number(e.target.value)||1)); renderIntern(); });
     internInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ internPage = Math.min(internTotal, Math.max(1, Number(e.target.value)||1)); renderIntern(); }});
@@ -439,9 +402,9 @@
         return;
       }
       if (internOverlay.classList.contains('open')) {
-        if (e.key === 'Escape') { if (internVideoMode) backToInternDeck(); else closeIntern(); }
-        if (!internVideoMode && ['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); internPage = Math.max(1, internPage-1); renderIntern(); }
-        if (!internVideoMode && ['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); internPage = Math.min(internTotal, internPage+1); renderIntern(); }
+        if (e.key === 'Escape') closeIntern();
+        if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); internPage = Math.max(1, internPage-1); renderIntern(); }
+        if (['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); internPage = Math.min(internTotal, internPage+1); renderIntern(); }
       }
     });
   </script>
