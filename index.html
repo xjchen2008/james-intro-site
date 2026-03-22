@@ -78,10 +78,10 @@
     .hobby{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);border-radius:10px;padding:clamp(.28rem,.62vw,.46rem);font-size:clamp(.62rem,.86vw,.78rem);min-height:1.65rem;display:flex;align-items:center;transition:transform var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease)}
     .hobby:hover{transform:translateX(2px);background:rgba(255,255,255,.12);border-color:rgba(125,211,252,.5)}
 
-    .portal-card{width:fit-content;max-width:min(95vw,1320px);height:auto;border:0;border-radius:0;background:transparent;display:block;box-shadow:none;cursor:pointer;overflow:visible;transition:transform var(--dur-mid) var(--ease)}
-    .portal-card:hover{transform:translateY(-4px) scale(1.004)}
-    .portal-card img{width:min(95vw,1320px);height:auto;display:block;object-fit:contain;border:1px solid rgba(255,255,255,.24);border-radius:var(--radius-3);background:rgba(255,255,255,.07);box-shadow:0 24px 60px rgba(0,0,0,.35);transition:transform var(--dur-slow) var(--ease),filter var(--dur-mid) var(--ease),border-color var(--dur-mid) var(--ease),box-shadow var(--dur-mid) var(--ease)}
-    .portal-card:hover img{transform:scale(1.01);filter:saturate(1.05);border-color:rgba(125,211,252,.55);box-shadow:0 30px 72px rgba(0,0,0,.45)}
+    .portal-card{width:min(95vw,1320px);height:min(84dvh,900px);border:1px solid rgba(255,255,255,.24);border-radius:var(--radius-3);background:rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 24px 60px rgba(0,0,0,.35);cursor:pointer;overflow:hidden;transition:transform var(--dur-mid) var(--ease),box-shadow var(--dur-mid) var(--ease),border-color var(--dur-mid) var(--ease)}
+    .portal-card:hover{transform:translateY(-4px) scale(1.004);box-shadow:0 30px 72px rgba(0,0,0,.45);border-color:rgba(125,211,252,.55)}
+    .portal-card img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;object-fit:contain;background:transparent;transition:transform var(--dur-slow) var(--ease),filter var(--dur-mid) var(--ease)}
+    .portal-card:hover img{transform:scale(1.01);filter:saturate(1.05)}
     .portal-title{font-family:var(--font-display);font-size:clamp(1.4rem,3.5vw,2.4rem)}
     .portal-sub{font-size:clamp(.8rem,1.2vw,1rem);color:#d2def5;text-align:center;max-width:85%}
     .portal-btn{padding:.7rem 1.1rem;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#081020;font-weight:700;cursor:pointer}
@@ -94,6 +94,11 @@
     .progress{position:fixed;top:0;left:0;height:3px;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));transform-origin:left;transform:scaleX(0);z-index:9999;transition:transform var(--dur-mid) var(--ease)}
 
     .nested-overlay{position:fixed;inset:0;background:rgba(6,10,20,.96);z-index:3000;display:flex;flex-direction:column;opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.01);transition:opacity var(--dur-mid) var(--ease),transform var(--dur-mid) var(--ease),visibility var(--dur-mid) var(--ease)}
+
+    .image-lightbox{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:rgba(2,6,14,.92);opacity:0;visibility:hidden;pointer-events:none;transition:opacity var(--dur-mid) var(--ease),visibility var(--dur-mid) var(--ease)}
+    .image-lightbox.open{opacity:1;visibility:visible;pointer-events:auto}
+    .image-lightbox img{max-width:96vw;max-height:90dvh;object-fit:contain;cursor:zoom-in;transition:transform var(--dur-fast) var(--ease);transform-origin:center center}
+    .lightbox-hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);padding:.42rem .72rem;border-radius:999px;font-size:.76rem;color:#dbe9ff;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.22)}
     .nested-overlay.open{opacity:1;visibility:visible;pointer-events:auto;transform:scale(1)}
     .nested-toolbar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid rgba(255,255,255,.2);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0))}
     .nested-title{font-size:14px;color:#e5eeff}
@@ -224,6 +229,11 @@
   </section>
 
 
+  <div class="image-lightbox" id="imageLightbox" aria-hidden="true">
+    <img id="lightboxImg" src="infoplot_L-band_forest-radar_english.png" alt="PhD project image full view" />
+    <div class="lightbox-hint">Scroll to zoom · Click background or press Esc to close</div>
+  </div>
+
   <div class="nested-overlay" id="nestedOverlay" aria-hidden="true">
     <div class="nested-toolbar">
       <div class="nested-title" id="nestedTitle">PhD Deck · Page 1 / 53</div>
@@ -306,6 +316,10 @@
     });
 
     // Nested deck logic
+    const imageLightbox = document.getElementById('imageLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    let lightboxScale = 1;
+
     const nestedOverlay = document.getElementById('nestedOverlay');
     const nestedImg = document.getElementById('nestedImg');
     const nestedTitle = document.getElementById('nestedTitle');
@@ -326,7 +340,26 @@
     let internPage = 1;
 
     function nestedOpen(){ return nestedOverlay.classList.contains('open'); }
-    function anyOverlayOpen(){ return nestedOverlay.classList.contains('open') || internOverlay.classList.contains('open'); }
+    function lightboxOpen(){ return imageLightbox.classList.contains('open'); }
+    function anyOverlayOpen(){ return nestedOverlay.classList.contains('open') || internOverlay.classList.contains('open') || lightboxOpen(); }
+
+    function applyLightboxScale(){
+      lightboxImg.style.transform = `scale(${lightboxScale})`;
+      lightboxImg.style.cursor = lightboxScale > 1 ? 'zoom-out' : 'zoom-in';
+    }
+    function openLightbox(){
+      lightboxScale = 1;
+      applyLightboxScale();
+      imageLightbox.classList.add('open');
+      imageLightbox.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){
+      imageLightbox.classList.remove('open');
+      imageLightbox.setAttribute('aria-hidden','true');
+      lightboxScale = 1;
+      applyLightboxScale();
+    }
+
     function renderNested(){
       nestedImg.src = `${nestedFolder}/Slide${nestedPage}.png`;
       nestedTitle.textContent = `PhD Deck · Page ${nestedPage} / ${nestedTotal}`;
@@ -366,7 +399,21 @@
     }
 
     document.getElementById('enterNestedBtn').addEventListener('click', openNested);
+    document.getElementById('enterNestedBtn').addEventListener('dblclick', (e) => { e.preventDefault(); openLightbox(); });
     document.getElementById('enterInternBtn').addEventListener('click', openIntern);
+
+    imageLightbox.addEventListener('click', (e) => { if (e.target === imageLightbox) closeLightbox(); });
+    lightboxImg.addEventListener('click', (e) => {
+      e.stopPropagation();
+      lightboxScale = lightboxScale > 1 ? 1 : 1.45;
+      applyLightboxScale();
+    });
+    imageLightbox.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const next = lightboxScale + (e.deltaY < 0 ? 0.12 : -0.12);
+      lightboxScale = Math.min(2.8, Math.max(1, Number(next.toFixed(2))));
+      applyLightboxScale();
+    }, { passive: false });
     document.getElementById('exitIntern').addEventListener('click', closeIntern);
     document.getElementById('prevIntern').addEventListener('click', ()=>{ internPage = Math.max(1, internPage-1); renderIntern(); });
     document.getElementById('nextIntern').addEventListener('click', ()=>{ internPage = Math.min(internTotal, internPage+1); renderIntern(); });
@@ -395,6 +442,12 @@
     });
 
     document.addEventListener('keydown',(e)=>{
+      if (lightboxOpen()) {
+        if (e.key === 'Escape') closeLightbox();
+        if (['+','='].includes(e.key)) { e.preventDefault(); lightboxScale = Math.min(2.8, Number((lightboxScale + 0.12).toFixed(2))); applyLightboxScale(); }
+        if (['-','_'].includes(e.key)) { e.preventDefault(); lightboxScale = Math.max(1, Number((lightboxScale - 0.12).toFixed(2))); applyLightboxScale(); }
+        return;
+      }
       if (nestedOpen()) {
         if (e.key === 'Escape') closeNested();
         if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); nestedPage = Math.max(1, nestedPage-1); renderNested(); }
