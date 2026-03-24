@@ -18,3 +18,8 @@
 ## 2026-03-24 10:26 EDT — Savepoint
 - Added PhD level-2 toolbar Video button (`Video ↗`) to open YouTube link: `https://youtu.be/0VtNoPcQ_LY`.
 - Requested action: commit and push to GitHub.
+
+## 2026-03-24 13:27 EDT — Savepoint
+- Updated 3rd-slide (PhD) level-2 PNG set from `James_Chen_Skyworks_On_Site_v3/` into local project folder `James_Chen_Skyworks_On_Site_v0/`.
+- Synced PhD level-2 page controls from 53 to 39 pages (`nestedTotal`, title text, slider/input max).
+- User confirmed push.
