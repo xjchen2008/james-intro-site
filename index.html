@@ -251,6 +251,7 @@
       <div class="nested-nav">
         <button class="toolbar-btn" id="prevNested">◀ Prev</button>
         <button class="toolbar-btn" id="nextNested">Next ▶</button>
+        <button class="toolbar-btn" id="openPhdVideo">Video ↗</button>
         <button class="toolbar-btn" id="exitNested">Back (Esc)</button>
       </div>
     </div>
@@ -406,6 +407,10 @@
       internDeckShell.style.display = 'block';
     }
 
+    function openPhdVideo(){
+      window.open('https://youtu.be/0VtNoPcQ_LY', '_blank', 'noopener,noreferrer');
+    }
+
     function openInternVideo(){
       window.open('https://youtu.be/qzhs7aVC5mg?t=187', '_blank', 'noopener,noreferrer');
     }
@@ -437,6 +442,7 @@
     document.getElementById('exitNested').addEventListener('click', closeNested);
     document.getElementById('prevNested').addEventListener('click', ()=>{ nestedPage = Math.max(1, nestedPage-1); renderNested(); });
     document.getElementById('nextNested').addEventListener('click', ()=>{ nestedPage = Math.min(nestedTotal, nestedPage+1); renderNested(); });
+    document.getElementById('openPhdVideo').addEventListener('click', openPhdVideo);
 
     nestedSlider.addEventListener('input', (e) => {
       nestedPage = Math.min(nestedTotal, Math.max(1, Number(e.target.value) || 1));

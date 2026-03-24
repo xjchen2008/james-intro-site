@@ -14,3 +14,7 @@
 - User requested: savepoint first, then push to GitHub after confirmation.
 - Scope to include updated top-level flow (Intro -> Work -> PhD), intro bullet wording tweaks, and updated 2019 intern second-level PNG deck under `FDD_RF_Sensitivity_Analysis/`.
 - Reminder: wait for user final confirmation before running git push.
+
+## 2026-03-24 10:26 EDT — Savepoint
+- Added PhD level-2 toolbar Video button (`Video ↗`) to open YouTube link: `https://youtu.be/0VtNoPcQ_LY`.
+- Requested action: commit and push to GitHub.
