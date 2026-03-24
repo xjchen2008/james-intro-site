@@ -263,10 +263,10 @@
 
   <div class="nested-overlay" id="internOverlay" aria-hidden="true">
     <div class="nested-toolbar">
-      <div class="nested-title" id="internTitle">Qorvo Internship Deck · Page 1 / 5</div>
+      <div class="nested-title" id="internTitle">Qorvo Internship Deck · Page 1 / 4</div>
       <div class="jump-wrap">
-        <input type="range" id="internSlider" class="page-slider" min="1" max="5" value="1" />
-        <input type="number" id="internInput" class="page-input" min="1" max="5" value="1" />
+        <input type="range" id="internSlider" class="page-slider" min="1" max="4" value="1" />
+        <input type="number" id="internInput" class="page-input" min="1" max="4" value="1" />
       </div>
       <div class="nested-nav">
         <button class="toolbar-btn" id="prevIntern">◀ Prev</button>
@@ -343,7 +343,7 @@
     const internInput = document.getElementById('internInput');
     const internDeckShell = document.getElementById('internDeckShell');
     const internFolder = 'FDD_RF_Sensitivity_Analysis';
-    const internTotal = 5;
+    const internTotal = 4;
     let internPage = 1;
 
     function nestedOpen(){ return nestedOverlay.classList.contains('open'); }
