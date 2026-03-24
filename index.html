@@ -155,8 +155,8 @@
           <h3>Professional Snapshot</h3>
           <ul class="bullets">
             <li>Focus areas: RFIC, microwave engineering, and data analysis.</li>
+            <li>Work Experience: SR Design RF Engineer for MHB ASW &amp; L-PAMiD in TxDSM-2026 &amp; 2027; Desense Analysis (2019).</li>
             <li>University of Massachusetts Amherst, PhD: L-band Radar for Forest Temporal Dynamics.</li>
-            <li>Work Experience: SR Design RF Engineer for MHB ASW &amp; L-PAMiD in TxDSM-2026 &amp; 2027.</li>
           </ul>
         </article>
         <article class="panel">
@@ -285,12 +285,17 @@
 
 
   <script>
+    // Reorder top-level flow to: Intro -> Work -> PhD
+    const slidePortal = document.getElementById('slide-portal');
+    const slideExperience = document.getElementById('slide-experience');
+    if (slidePortal && slideExperience) slideExperience.after(slidePortal);
+
     const slides = [...document.querySelectorAll('.slide')];
     const dots = document.getElementById('navDots');
     const progress = document.getElementById('progress');
     let current = 0;
 
-    const dotLabels = ['Intro', 'PhD', 'Work'];
+    const dotLabels = ['Intro', 'Work', 'PhD'];
     slides.forEach((_, i) => {
       const b = document.createElement('button');
       b.className = 'dot' + (i===0 ? ' active':'');
